@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "w07-ci",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "workers_dev": true,
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "w07-ci-lab",
+      "database_id": "0c45612f-7c8b-45dc-ae39-db11a51948e2",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "META",
+      "id": "0a0af35b583742d981e962bcf0d7646e"
+    }
+  ]
+}
