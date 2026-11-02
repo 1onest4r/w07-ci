@@ -2,8 +2,8 @@ import { env as rawEnv, exports as rawExports } from "cloudflare:workers";
 import { applyD1Migrations } from "cloudflare:test";
 import { beforeAll, beforeEach, describe, it, expect } from "vitest";
 
-const env: any = rawEnv;
-const exports: any = rawExports;
+const env = rawEnv;
+const exports = rawExports;
 
 const BASE_URL = "https://example.com";
 
