@@ -3,8 +3,8 @@ interface Env {
   META: KVNamespace;
 }
 
-declare module "cloudflare:workers" {
-  interface ProvidedEnv extends Env {
+declare namespace Cloudflare {
+  interface Env {
     TEST_MIGRATIONS: Parameters<typeof import("cloudflare:test").applyD1Migrations>[1];
   }
 }
