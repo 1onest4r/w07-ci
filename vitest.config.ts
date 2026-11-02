@@ -1,33 +1,33 @@
+
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import {
- cloudflareTest,
- readD1Migrations
-} from "@cloudflare/vitest-plugin";
+import { cloudflareTest, readD1Migrations } from "@cloudflare/vitest-plugin";
 import { defineConfig } from "vitest/config";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 export default defineConfig({
- plugins: [
- cloudflareTest(async () => {
- const migrationsPath = fileURLToPath(
- new URL("./migrations/", import.meta.url)
- );
- const migrations = await readD1Migrations(
- path.resolve(migrationsPath)
- );
- return {
- wrangler: {
- configPath: "./wrangler.jsonc"
- },
- miniflare: {
- bindings: {
- TEST_MIGRATIONS: migrations
- }
- }
- };
- })
- ],
- test: {
- include: ["tests/**/*.test.ts"]
- }
+  plugins: [
+    cloudflareTest(async () => {
+      const migrationsPath = path.resolve(__dirname, "migrations");
+      const migrations = await readD1Migrations(migrationsPath);
+
+      return {
+        wrangler: {
+          configPath: path.resolve(__dirname, "wrangler.jsonc")
+        },
+        miniflare: {
+          bindings: {
+            TEST_MIGRATIONS: migrations
+          }
+        }
+      };
+    })
+  ],
+
+  test: {
+    include: ["tests/**/*.test.ts"],
+    environment: "node"
+  }
 });

@@ -1,21 +1,15 @@
 name: CI and Deploy
-
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  # ----------------------------------
-  # Job 1: Continuous Integration
-  # ----------------------------------
   ci:
     name: ci
     runs-on: ubuntu-latest
@@ -41,9 +35,6 @@ jobs:
       - name: Build
         run: npm run build
 
-  # ----------------------------------
-  # Job 2: Continuous Deployment
-  # ----------------------------------
   deploy:
     name: deploy
     needs: ci
@@ -55,8 +46,6 @@ jobs:
     concurrency:
       group: week9-production
       cancel-in-progress: false
-    permissions:
-      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -88,36 +77,12 @@ jobs:
         run: |
           TAG="w09-r${GITHUB_RUN_NUMBER}"
           RELEASE_URL="${DEPLOYMENT_URL:-$PRODUCTION_URL}"
-          
           cat > release-notes.md <<EOF
           # Global Event Ticket Reservation System
-          
           ## Release information
-          
           - Version tag: $TAG
           - Git commit: $GITHUB_SHA
           - Branch: main
           - Deployment URL: $RELEASE_URL
-          
-          ## Automated verification
-          
-          - ESLint: passed
-          - TypeScript type checking: passed
-          - Unit tests: passed
-          - Integration tests: passed
-          - Wrangler build: passed
-          - Cloudflare deployment: completed
-          - Production smoke tests: passed
-          
-          ## Rollback procedure
-          
-          Inspect Cloudflare Worker deployments.
-          Roll back to the previous stable Worker version.
-          Verify /health and /events again.
-          Correct the source code in GitHub.
           EOF
-          
-          gh release create "$TAG" \
-            --target "$GITHUB_SHA" \
-            --title "$TAG - Global Ticket Reservation" \
-            --notes-file release-notes.md
+          gh release create "$TAG" --target "$GITHUB_SHA" --title "$TAG - Global Ticket Reservation" --notes-file release-notes.md
