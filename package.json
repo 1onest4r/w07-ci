@@ -1,8 +1,22 @@
 {
   "devDependencies": {
-    "wrangler": "^4.156.0"
+    "@cloudflare/vitest-plugin": "^1.4.12",
+    "@cloudflare/workers-types": "^5.20261102.1",
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.6",
+    "eslint": "^10.14.0",
+    "globals": "^17.14.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.1",
+    "vitest": "^4.1.12",
+    "wrangler": "^4.156.1"
   },
   "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "vitest run tests/integration",
+    "build": "wrangler deploy --dry-run --outdir dist",
     "test:smoke": "node scripts/smoke.mjs"
   }
 }
